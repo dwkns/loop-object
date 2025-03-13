@@ -15,6 +15,7 @@ export default (eleventyConfig) => {
     return [...authors];
   });
 
+  // create a chuncked collection of posts for each author
   eleventyConfig.addCollection("authorsPosts", function (collectionApi) {
     // Get all posts
     const posts = collectionApi.getFilteredByGlob("./src/posts/*.md");
@@ -26,11 +27,18 @@ export default (eleventyConfig) => {
     })
     const authorsArray = [...authors];
    
-    let paginationSize = 3;
+    let paginationSize = 2; // number of posts per page
     let authorMap = [];
 
+    // loop through each author
     for( let authorName of authorsArray) {
-      let pagedItems = _.chunk(posts, paginationSize);
+      // Get the posts for this author
+      let authorPosts = posts.filter( (post) => post.data.author === authorName)
+     
+      // chink the posts for this author
+      let pagedItems = _.chunk(authorPosts, paginationSize);
+
+      // add each chunk to authorMap
       for( let pageNumber = 0, max = pagedItems.length; pageNumber < max; pageNumber++) {
         authorMap.push({
           authorName: authorName,
@@ -52,3 +60,4 @@ export const config = {
     output: "dist"
   },
 };
+
