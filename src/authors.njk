@@ -1,0 +1,18 @@
+---
+pagination:
+  data: collections.authorsPosts
+  size: 1
+  alias: author
+permalink: /authors/{{ author.authorName }}/{% if author.pageNumber %}{{ author.pageNumber + 1 }}/{% endif %}
+---
+<h1>Author: {{ author.authorName }}</h1>
+
+<ul>
+  {% for post in author.pageData %}
+    <a href="{{post.url}}"><li>{{ post.data.title }}</li></a>
+  {% endfor %}
+</ul>
+
+<p>page:{{ author.pageNumber + 1}} of {{author.totalPages}}</p>
+
+{% console author %}
